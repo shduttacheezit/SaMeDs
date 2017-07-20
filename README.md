@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * [Technologies](#technologies)
 
 
-##<a name="about"></a>About SaMeDs
+## <a name="about"></a>About SaMeDs
 SaMeDs was created as a front end project for Canvas Medical. <br>
 The main feature of this project is to search for similar medication available in the pharmaceutical world using the RxNorm ReST API. The main purpose of this project, however, was to build a React app. 
 
