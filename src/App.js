@@ -18,18 +18,30 @@ class App extends React.Component {
     this.setState = ({
       box: this.search.value })
   }
-  componentWillMount() {
-    if (this.props.box) {
-      fetch( 'https://rxnav.nlm.nih.gov/REST/drugs.json?name={this.search.value}' )
-        .then( response => response.json() )
-        .then( ({results: items}) => this.setState({items}))
+  componentDidMount() {
+    if (this.state.box) {
+      fetch( 'https://rxnav.nlm.nih.gov/REST/drugs.json?name=alavert' )
+        // .then( response => response.json() )
+        .then(result => {
+          result.json().then(jsonResult => {
+            if (jsonResult.drugGroup.conceptGroup) {
+              var finalList = []
+              var conceptGroup = jsonResult.drugGroup.conceptGroup
+              Object.keys(conceptGroup).forEach(key => {
+                var group = conceptGroup[key]
+                if (group.conceptProperties) {
+                  finalList = finalList.concat(group.conceptProperties)
+                }
+              })
+              this.setState({items:finalList}) 
+            } else {
+              this.setState({items:[]}) 
+            }
+          })
+        });
     }
   }
-  componentDidUpdate(){
-    console.log('Component update')
-  }
   render() {
-    let items = this.state.items
     return (
       <div className="App">
         <h1>{this.props.head}
@@ -41,8 +53,10 @@ class App extends React.Component {
           placeholder={this.state.box}
           onChange={this.update.bind(this)}/>
           <Button>Search Drug</Button>
-          {items.map(item => 
-            <Drug key={item.name} drug={item} />)}
+          {this.state.items.map(item => 
+            <Drug key={item.name} drug={item} />
+            )
+          }
         </p>
         <footer> {this.props.txt}
         </footer>
